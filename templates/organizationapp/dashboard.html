@@ -1,0 +1,41 @@
+{% extends 'organizationapp/base.html' %}
+
+{% block content %}
+
+<p class="p-2">
+    your locaton count is : {{org_location_count}}
+</p>
+
+{% for location in LocationDetails %}
+<div class="p4 my-5">
+    <p>
+        <span>{{location.location_name}}</span>
+    </p>
+    <p>
+        <span>{{location.location_address}}</span>
+    </p>
+</div>
+{% endfor%}
+
+{% if available_location_count > 0 %}
+<br>
+<p class="p-4">
+    add new location (available({{available_location_count}}))
+</p>
+
+<form action="" class="p-4 " method="post">
+    {% csrf_token %}
+    <div>
+        <label for="">Location</label>
+        <input class="border border-gray-400 my-2" type="text" name="location-name">
+    </div>
+    <div>
+        <label for="">Address</label>
+        <input class="border border-gray-400 my-2" type="text" name="location-address">
+    </div>
+    <button type="submit" class="border m-4 py-2 px-3 text-white kanit bg-orange-500 rounded-md">Add New</button>
+</form>
+
+{% endif %}
+
+{% endblock %}

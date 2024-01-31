@@ -1,0 +1,117 @@
+{% extends 'organizationapp/base.html' %}
+
+{% block content %}
+<div id="popup-div"
+    class="fixed top-0 left-0 bg-black bg-opacity-20 w-[100vw] h-[100vh] z-10 flex justify-center items-center hidden ">
+    <div class="bg-white p-6 rounded-lg flex flex-col">
+        <p class="text-gray-500 kanit text-xl">Confirm your plan before proceeding </p>
+        <div id="content-div" class="plan w-full flex flex-col  justify-between items-center text-sm kanit gap-2 my-8 [&>div]:w-full [&>div]:flex [&>div]:justify-between  ">
+        </div>
+        <p class="w-full flex gap-3">
+            <button onclick="changePlan();" class="text-sm bg-gray-300 text-gray-700 prompt border-none shadow-md py-2 px-3 white rounded-md grow transition">
+                Change Plan 
+                <i class="fa fa-close ml-2"></i>
+            </button>
+            <button onclick="submit();" class="text-sm bg-orange-500 text-white prompt border-none shadow-md py-2 px-3 white rounded-md grow transition active:scale-90 ">
+                Confirm Plan
+                <i class="fa fa-check ml-2"></i>
+            </button>
+        </p>
+    </div>
+</div>
+<h1 class=" text-2xl roboto m-10">Plans</h1>
+<section class="flex flex-wrap">
+    <form method="post" class="flex flex-col w-full max-w-[700px] p-8">
+        {% csrf_token %}
+        <div class="flex justify-between p-2">
+            <p class="text-md kanit text-gray-700">Choose A Plan</p>
+            <p class="text-sm prompt text-gray-400 uppercase">You Currently have 1 Location</p>
+        </div>
+        <div class="flex items-center gap-2 m-4 justify-end">
+            <span class="text-sm kanit text-gray-800">Subscription : </span>
+            <span
+                class="text-sm bg-orange-500 text-white prompt border-none shadow-md py-2 px-3 white rounded-md">Monthly</span>
+        </div>
+        <div class="plans-wrapper flex flex-col w-full [&>div]:my-4">
+            <script>var yearly_plans = {};</script>
+            {% for plan in yearly_plans %}
+            <script>
+                yearly_plans['{{plan.price}}'] = {
+                    "get_monthly_price":"{{plan.get_monthly_price}}",
+                    "price":"{{plan.price}}",
+                    "type_plan":"{{plan.type_plan}}",
+                    "locations_count":"{{plan.locations_count}}",
+                    "description":"{{plan.description}}"
+                };
+            </script>
+            <div id="{{plan.price}}-div" class="plan w-full flex justify-between items-center text-sm kanit ">
+                <span class="grow"><input type="radio" value="{{plan.price}}" name="plan-selected" required
+                        onchange="selectedOne(this);"></span>
+                <span class="grow">{{plan.get_monthly_price}}$/ month</span>
+                <span class="grow">{{plan.price}}$ / year</span>
+                <span class="grow">{{plan.type_plan}}</span>
+                <span class="grow flex flex-col">
+                    <span>{{plan.locations_count}} Locations</span>
+                    <span>{{plan.description}}</span>
+                </span>
+            </div>
+            {% endfor %}
+            <button id="proceed-payment-button" type="button" onclick="proceedPayment(this);"
+                class="text-md kanit text-gray-600 bg-gray-300 py-2 px-4 rounded-md mt-5 transition ">Proceed To
+                Payment</button>
+        </div>
+    </form>
+    <section>
+    </section>
+</section>
+{% endblock %}
+
+{% block js %}
+<script>
+    var selected_plan = false;
+    function selectedOne(element) {
+        if (selected_plan == false) {
+            document.getElementById("proceed-payment-button").classList.remove("bg-gray-300");
+            document.getElementById("proceed-payment-button").classList.remove("text-gray-600");
+            document.getElementById("proceed-payment-button").classList.add("bg-orange-500", "text-white", "shadow-lg", "shadow-slate-400", "active:scale-90");
+        };
+        selected_plan = element.value;
+    };
+    function proceedPayment(element) {
+        if (selected_plan != false) {
+            document.getElementById("content-div").innerHTML = `
+            <div>
+                <span class="text-gray-500">Monthly Charges : </span>
+                <span>${yearly_plans[selected_plan]['get_monthly_price']}$</span>
+            </div>
+            <div>
+                <span class="text-gray-500">Yearly Charges : </span>
+                <span>${yearly_plans[selected_plan]['price']}$</span>
+            </div>
+            <div>
+                <span class="text-gray-500">Type : </span>
+                <span>${yearly_plans[selected_plan]['type_plan']}</span>
+            </div>
+            <div>
+                <span class="text-gray-500">No. of Locations : </span>
+                <span>${yearly_plans[selected_plan]['locations_count']}</span>
+            </div>
+            <div>
+                <span></span>
+                <span>${yearly_plans[selected_plan]['description']}</span>
+            </div>
+            `;
+            document.getElementById("popup-div").classList.remove("hidden");
+        };
+    };
+    function submit(){
+        document.getElementsByTagName("form")[0].submit();
+        console.log("submited"+selected_plan);
+    };
+    function changePlan(){
+        document.getElementById("popup-div").classList.add("hidden");
+    };
+
+</script>
+
+{% endblock %}

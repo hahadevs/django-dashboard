@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignUP</title>
+    <!-- google fonts preconnect  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- google fonts  -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400&family=Roboto:wght@900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300&family=Roboto:wght@900&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kanit:wght@500&family=Prompt:wght@400&family=Roboto:wght@800&display=swap"
+        rel="stylesheet">
+    <!-- tailwind cdn  -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- font awesome cdn  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<style>
+    .roboto {
+        font-family: 'Roboto';
+    }
+
+    .kanit {
+        font-family: 'Kanit';
+    }
+
+    .prompt {
+        font-family: 'Prompt';
+    }
+
+    .form-row {
+        margin: 0.2rem 0 0.2rem 0;
+    }
+</style>
+
+<body class="flex justify-center items-center min-w-screen min-h-screen bg-gray-200 ">
+    <main class="w-[80vw] h-[56vh] max-w-[850px] max-h-content flex bg-white p-3 rounded-lg shadow-lg ">
+        <div class="min-w-[50%] min-h-[100%] border bg-cover bg-right rounded-lg shadow-lg"
+            style="background-image: url(static/images/bg.jpg);"></div>
+        <form action="" class="min-w-[50%] min-h-[100%] flex flex-col justify-evenly p-6" method="post">
+            {% csrf_token %}
+            <h2 class="roboto text-2xl text-slate-800 self-start">Sign in to your account</h2>
+            <p class="kanit text-sm text-gray-500 mt-2 pb-4">Welcome back, please login to your account</p>
+            {% if error %}
+            <div class="text-sm text-rose-500 bg-rose-100 border-2 border-rose-300 p-2 rounded-md mb-2">{{error}}</div>
+            {% endif %}
+            <div class="form-row">
+                <div class="field">
+                    <label for="" class="prompt text-gray-500 text-sm mb-1">Email</label>
+                    <input type="email"
+                        class="kanit text-gray-700 text-sm border w-full border-gray-300 p-2 rounded-sm focus:border-gray-400 focus:outline-none focus:shadow-md bg-gray-200 "
+                        name="email" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="field relative">
+                    <label for="password-input" class="prompt text-gray-500 text-sm mb-1">Password</label>
+                    <input type="password" id="password-input" name="password"
+                        class="kanit text-gray-700 text-sm border w-full border-gray-300 p-2 rounded-sm focus:border-gray-400 focus:outline-none focus:shadow-md bg-gray-200 "
+                        required>
+                    <i id="password-input-eye"
+                        class="fa fa-eye-slash text-lg text-gray-400 absolute right-4 top-7 hover:cursor-pointer hover:text-gray-500"></i>
+                </div>
+            </div>
+
+            <div class="form-row mt-2">
+                <div class="field flex justify-between px-1 text-gray-700">
+                    <span><input type="checkbox" class="hover:cursor-pointer"><label
+                            class=" text-sm kanit ml-2 ">Remember me</label></span>
+                    <span><a href="" class="text-sm hover:underline kanit">Forgot password ?</a></span>
+                </div>
+            </div>
+
+            <button class="w-full bg-orange-500 rounded-md shadow-md text-white prompt text-md py-2 my-5">Sign
+                in</button>
+            <p class="text-sm text-center text-gray-600">Don't have an account ? <a href="/signup"
+                    class="text-orange-500 underline">SignUp</a></p>
+        </form>
+    </main>
+</body>
+<script>
+    var password_visible_status = false;
+    document.getElementById("password-input-eye").addEventListener("click", function (e) {
+        if (password_visible_status == false) {
+            document.getElementById("password-input-eye").classList.remove("fa-eye-slash");
+            document.getElementById("password-input-eye").classList.add("fa-eye");
+            document.getElementById("password-input").setAttribute("type", "text");
+            password_visible_status = true;
+        }
+        else {
+            document.getElementById("password-input-eye").classList.remove("fa-eye");
+            document.getElementById("password-input-eye").classList.add("fa-eye-slash");
+            document.getElementById("password-input").setAttribute("type", "password");
+            password_visible_status = false;
+        };
+    });
+</script>
+
+</html>

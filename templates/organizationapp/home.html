@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePage</title>
+</head>
+<body>
+    <h1>Welcome to home page</h1>
+    <div style="height: 100px;"></div>
+    <h3>login user is :{% if request.user.is_authenticated %}{{request.user}}{% else %}User not logged in <a href="/login">Login here</a>{% endif %}</h3>
+    <div style="height: 100px;"></div>
+    <a href="/logout">logout</a>
+</body>
+</html>
